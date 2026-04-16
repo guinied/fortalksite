@@ -20,20 +20,20 @@ const plans = [
   {
     name: "Basic",
     connections: "1 conexão, 2 atendentes",
-    price: "149,90",
+    price: "209,70",
     features: baseFeatures,
   },
   {
     name: "Professional",
     connections: "2 conexões, 4 atendentes",
-    price: "299,40",
+    price: "419,40",
     features: [...baseFeatures],
     highlighted: true,
   },
   {
     name: "Enterprise",
     connections: "4 conexões, 8 atendentes",
-    price: "598,80",
+    price: "838,80",
     features: [...baseFeatures],
   },
 ];
