@@ -8,11 +8,6 @@ import { Button } from "./ui/button";
 
 const faqs = [
   {
-    question: "É possível conectar meu Instagram?",
-    answer:
-      "Sim, o Fortalk permite a conexão com o Instagram para gerenciar atendimentos e interações diretamente pela plataforma.",
-  },
-  {
     question: "Tem valor de implementação do sistema?",
     answer:
       "Não, o Fortalk não possui custos de implementação. Oferecemos uma integração fácil e sem custos adicionais para garantir uma transição suave para aprimorar o seu atendimento no WhatsApp.",
@@ -25,7 +20,7 @@ const faqs = [
   {
     question: "Posso conectar mais de um número na plataforma?",
     answer:
-      "Sim, no Fortalk é possível conectar e gerenciar mais de um número de WhatsApp ou Instagram na plataforma. Oferecemos a flexibilidade necessária para atender às demandas de empresas com múltiplos canais de comunicação.",
+      "Sim, no Fortalk é possível conectar e gerenciar mais de um número de WhatsApp na plataforma. Oferecemos a flexibilidade necessária para atender às demandas de empresas com múltiplos canais de comunicação.",
   },
   {
     question: "Eu possuo suporte se necessário?",
