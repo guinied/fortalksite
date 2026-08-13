@@ -29,8 +29,8 @@ export function HeroSection() {
             style={{ animationDelay: "0.2s" }}
           >
             A ForTalk centraliza o atendimento da sua empresa de forma
-            organizada, fácil e o melhor de tudo, juntando WhatsApp e Instagram
-            em uma única plataforma.
+            organizada, fácil e o melhor de tudo, reunindo todos os seus
+            atendimentos de WhatsApp em uma única plataforma.
           </p>
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up"

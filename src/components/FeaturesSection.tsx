@@ -6,7 +6,7 @@ const features = [
     icon: Zap,
     title: "Organização e rapidez",
     description:
-      "A ForTalk centraliza o atendimento da sua empresa de forma organizada, fácil e o melhor de tudo, WhatsApp e Instagram em somente um lugar.",
+      "A ForTalk centraliza o atendimento da sua empresa de forma organizada, fácil e o melhor de tudo, WhatsApp em somente um lugar.",
   },
   {
     icon: BarChart3,

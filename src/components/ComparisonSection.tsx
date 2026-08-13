@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const userFeatures = [
   "Centralização do Atendimento",
-  "WhatsApp e Instagram juntos",
   "Análise Detalhada de Desempenho",
   "Dados seguros",
   "Envio de Mensagens em Massa",

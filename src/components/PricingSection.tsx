@@ -13,7 +13,7 @@ const baseFeatures = [
   "Etiquetas personalizadas",
   "Setores personalizados",
   "Relatórios detalhados",
-  "Conexão com Instagram e WhatsApp",
+  "Conexão com WhatsApp",
 ];
 
 const plans = [
