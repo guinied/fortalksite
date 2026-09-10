@@ -145,7 +145,7 @@ export function TrialRequestPage() {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -173,14 +173,14 @@ export function TrialRequestPage() {
   function openTrialForm() {
     setSubmitted(false);
     setShowError(false);
-    setSubmitError(false);
+    setSubmitError(null);
     setIsFormOpen(true);
   }
 
   function updateField(field: keyof FormState, value: string) {
     setSubmitted(false);
     setShowError(false);
-    setSubmitError(false);
+    setSubmitError(null);
     setForm((current) => ({ ...current, [field]: value }));
   }
 
@@ -194,7 +194,7 @@ export function TrialRequestPage() {
     }
 
     setIsSending(true);
-    setSubmitError(false);
+    setSubmitError(null);
 
     try {
       const response = await fetch("/api/teste-gratis", {
@@ -203,11 +203,23 @@ export function TrialRequestPage() {
         body: JSON.stringify(form),
       });
 
-      if (!response.ok) throw new Error("Falha ao enviar a solicitação");
+      const result = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
+      if (!response.ok) {
+        throw new Error(
+          result?.message ?? "Não foi possível enviar agora. Tente novamente.",
+        );
+      }
 
       setSubmitted(true);
-    } catch {
-      setSubmitError(true);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível enviar agora. Tente novamente.",
+      );
     } finally {
       setIsSending(false);
     }
@@ -1070,8 +1082,7 @@ export function TrialRequestPage() {
                       className="text-sm font-medium text-red-600"
                       role="alert"
                     >
-                      Não foi possível enviar agora. Tente novamente em
-                      instantes.
+                      {submitError}
                     </p>
                   )}
 

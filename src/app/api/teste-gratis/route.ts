@@ -58,15 +58,46 @@ async function readResponseBody(response: Response) {
   }
 }
 
-function hasProviderError(body: unknown) {
-  if (!isRecord(body)) return false;
+function getProviderStatus(body: unknown) {
+  if (!isRecord(body)) return "";
 
-  if (body.success === false || body.success === "false") return true;
-  if (body.error) return true;
-
+  const response = isRecord(body.response) ? body.response : null;
+  const nestedStatus =
+    response && typeof response.status === "string"
+      ? response.status.toLowerCase()
+      : "";
   const status =
     typeof body.status === "string" ? body.status.toLowerCase() : "";
-  return ["error", "failed", "failure"].includes(status);
+
+  return nestedStatus || status;
+}
+
+function isProviderAccepted(body: unknown) {
+  if (!isRecord(body)) return false;
+
+  if (body.success === true || body.success === "true") return true;
+
+  return getProviderStatus(body) === "success";
+}
+
+function getProviderFailureMessage(response: Response, body: unknown) {
+  if (response.status === 401) {
+    return "A conexão com o WhatsApp não foi autorizada. Verifique o token da UAZAPI na Vercel.";
+  }
+
+  if (response.status === 429) {
+    return "A UAZAPI atingiu um limite temporário de envios. Aguarde alguns instantes e tente novamente.";
+  }
+
+  if (isRecord(body) && body.error_key === "WHATSAPP_REACHOUT_TIMELOCK") {
+    return "O WhatsApp aplicou uma restrição temporária para iniciar novos envios. Tente novamente mais tarde.";
+  }
+
+  if (!response.ok) {
+    return "A UAZAPI recusou o envio. Confirme se a instância está conectada e ativa.";
+  }
+
+  return "A UAZAPI não confirmou o envio. Tente novamente em instantes.";
 }
 
 function getRequiredEnvironment() {
@@ -165,12 +196,13 @@ export async function POST(request: Request) {
 
     const providerBody = await readResponseBody(response);
 
-    if (!response.ok || hasProviderError(providerBody)) {
+    if (!response.ok || !isProviderAccepted(providerBody)) {
       console.error("UAZAPI rejeitou o pedido de teste grátis", {
         status: response.status,
+        providerStatus: getProviderStatus(providerBody),
       });
       return NextResponse.json(
-        { message: "O serviço de WhatsApp não aceitou a solicitação." },
+        { message: getProviderFailureMessage(response, providerBody) },
         { status: 502 },
       );
     }
