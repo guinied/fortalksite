@@ -8,7 +8,6 @@ import {
   Clock3,
   History,
   LayoutDashboard,
-  MessageCircle,
   ShieldCheck,
   Sparkles,
   Users,
@@ -110,7 +109,7 @@ const faqs = [
 ];
 
 const fieldClassName =
-  "mt-2 h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10";
+  "mt-1.5 h-11 w-full rounded-lg border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10";
 
 function formatPhone(value: string) {
   const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -849,78 +848,59 @@ export function TrialRequestPage() {
         <div className="fixed inset-0 z-[100] overflow-y-auto bg-slate-950/55 px-4 py-6 backdrop-blur-md sm:py-10">
           <div className="flex min-h-full items-center justify-center">
             <div
-              className="w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white text-slate-950 shadow-2xl shadow-slate-950/30"
+              className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white text-slate-950 shadow-2xl shadow-slate-950/30"
               role="dialog"
               aria-modal="true"
               aria-labelledby={!submitted ? "trial-dialog-title" : undefined}
               aria-label={submitted ? "Solicitação recebida" : undefined}
             >
-              <div
-                className={
-                  submitted
-                    ? "bg-white p-4 sm:p-5"
-                    : "bg-gradient-to-br from-primary/10 via-white to-accent/10 p-6 sm:p-8"
-                }
+              <button
+                type="button"
+                aria-label="Fechar"
+                onClick={() => setIsFormOpen(false)}
+                className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-primary hover:text-primary focus:outline-none focus:ring-4 focus:ring-primary/15"
               >
-                <div
-                  className={`flex items-start gap-5 ${submitted ? "justify-end" : "justify-between"}`}
-                >
-                  {!submitted && (
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
-                        <MessageCircle className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-                          Comece agora
-                        </p>
-                        <h2
-                          id="trial-dialog-title"
-                          className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
-                        >
-                          Faça seu teste grátis
-                        </h2>
-                        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
-                          Informe, se souber, o tamanho aproximado da sua
-                          operação. Esses dados não precisam estar exatos.
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  <button
-                    type="button"
-                    aria-label="Fechar"
-                    onClick={() => setIsFormOpen(false)}
-                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-primary hover:text-primary focus:outline-none focus:ring-4 focus:ring-primary/15"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
+                <X className="h-4 w-4" />
+              </button>
 
               {submitted ? (
                 <div
-                  className="flex min-h-[360px] flex-col items-center justify-center px-6 py-12 text-center sm:px-12"
+                  className="flex min-h-[300px] flex-col items-center justify-center px-6 py-12 text-center sm:px-10"
                   aria-live="polite"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary ring-8 ring-primary/5">
-                    <Check className="h-8 w-8" strokeWidth={2.5} />
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary ring-8 ring-primary/5">
+                    <Check className="h-7 w-7" strokeWidth={2.5} />
                   </div>
-                  <p className="mt-7 max-w-md text-center text-base leading-6 text-slate-600">
+                  <p className="mt-6 max-w-md text-center text-sm leading-6 text-slate-600">
                     Nossa equipe ForTalk entrará em contato e enviará seus
                     acessos em alguns minutos.
                   </p>
                   <button
                     type="button"
                     onClick={() => setIsFormOpen(false)}
-                    className="mt-8 inline-flex h-11 items-center justify-center rounded-xl bg-primary px-8 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
+                    className="mt-6 inline-flex h-10 items-center justify-center rounded-lg bg-primary px-7 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
                   >
                     Fechar
                   </button>
                 </div>
               ) : (
-                <form className="space-y-5 p-6 sm:p-8" onSubmit={handleSubmit}>
-                  <div className="grid gap-5 sm:grid-cols-2">
+                <form
+                  className="space-y-4 p-5 pt-14 sm:p-6 sm:pt-14"
+                  onSubmit={handleSubmit}
+                >
+                  <div className="pr-10">
+                    <h2
+                      id="trial-dialog-title"
+                      className="text-xl font-bold tracking-tight sm:text-2xl"
+                    >
+                      Solicitar teste grátis
+                    </h2>
+                    <p className="mt-1 text-sm leading-5 text-slate-500">
+                      Preencha seus dados. Usuários e números são aproximados.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-3.5 sm:grid-cols-2">
                     <div className="sm:col-span-2">
                       <label
                         htmlFor="trial-name"
@@ -1036,27 +1016,27 @@ export function TrialRequestPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-primary/20 bg-[#f1fffc] p-4">
+                  <div className="rounded-xl border border-primary/20 bg-[#f1fffc] p-3">
                     <div className="flex items-start gap-3">
-                      <div className="rounded-xl bg-primary/15 p-2 text-primary">
-                        <BarChart3 className="h-5 w-5" />
+                      <div className="rounded-lg bg-primary/15 p-1.5 text-primary">
+                        <BarChart3 className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
                           Estimativa da operação
                         </p>
                         {estimate ? (
                           <>
-                            <p className="mt-1 text-lg font-bold text-slate-950">
+                            <p className="mt-0.5 text-base font-bold text-slate-950">
                               Estimativa recebida
                             </p>
-                            <p className="text-sm text-slate-600">
+                            <p className="text-xs leading-5 text-slate-600">
                               A equipe usa esses dados para indicar a
                               configuração mais adequada para sua operação.
                             </p>
                           </>
                         ) : (
-                          <p className="mt-1 text-sm leading-6 text-slate-600">
+                          <p className="mt-0.5 text-xs leading-5 text-slate-600">
                             Opcional: informe uma estimativa para orientar a
                             configuração. Você também pode deixar em branco.
                           </p>
@@ -1087,7 +1067,7 @@ export function TrialRequestPage() {
                   <button
                     type="submit"
                     disabled={isSending || submitted}
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
+                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
                   >
                     {isSending
                       ? "Enviando solicitação..."
