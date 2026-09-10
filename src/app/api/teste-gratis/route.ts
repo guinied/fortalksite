@@ -77,7 +77,9 @@ function isProviderAccepted(body: unknown) {
 
   if (body.success === true || body.success === "true") return true;
 
-  return getProviderStatus(body) === "success";
+  return ["pending", "queued", "sent", "success"].includes(
+    getProviderStatus(body),
+  );
 }
 
 function getProviderFailureMessage(response: Response, body: unknown) {
