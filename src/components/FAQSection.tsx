@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { Button } from "./ui/button";
 
 const faqs = [
   {
@@ -29,7 +28,11 @@ const faqs = [
   },
 ];
 
-export function FAQSection() {
+type FAQSectionProps = {
+  onTrialClick?: () => void;
+};
+
+export function FAQSection({ onTrialClick }: FAQSectionProps) {
   return (
     <section id="faq" className="py-20 bg-secondary/20">
       <div className="container mx-auto px-4">
@@ -39,10 +42,10 @@ export function FAQSection() {
 
         <div className="max-w-3xl mx-auto">
           <Accordion type="single" collapsible className="space-y-4">
-            {faqs.map((faq, index) => (
+            {faqs.map((faq) => (
               <AccordionItem
-                key={index}
-                value={`item-${index}`}
+                key={faq.question}
+                value={faq.question}
                 className="bg-background rounded-lg px-6 border-none shadow-md"
               >
                 <AccordionTrigger className="text-left hover:no-underline">
@@ -74,14 +77,24 @@ export function FAQSection() {
               Não achou as respostas que estava procurando? Por favor, nos envie
               uma mensagem com sua dúvida que responderemos assim que possível.
             </p>
-            <a
-              href="https://wa.link/sz2rwj"
-              target="_blank"
-              rel="noopener"
-              className="border-[1px] border-primary text-white bg-primary px-4 py-2 rounded-[12px] flex items-center justify-center text-sm font-semibold hover:bg-white hover:text-primary transition-colors"
-            >
-              Entrar em contato
-            </a>
+            {onTrialClick ? (
+              <button
+                type="button"
+                onClick={onTrialClick}
+                className="border-[1px] border-primary text-white bg-primary px-4 py-2 rounded-[12px] flex items-center justify-center text-sm font-semibold hover:bg-white hover:text-primary transition-colors"
+              >
+                Solicitar teste grátis
+              </button>
+            ) : (
+              <a
+                href="https://wa.link/sz2rwj"
+                target="_blank"
+                rel="noopener"
+                className="border-[1px] border-primary text-white bg-primary px-4 py-2 rounded-[12px] flex items-center justify-center text-sm font-semibold hover:bg-white hover:text-primary transition-colors"
+              >
+                Entrar em contato
+              </a>
+            )}
           </div>
         </div>
       </div>

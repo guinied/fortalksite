@@ -1,9 +1,6 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { toast } from "sonner";
-import { useStripe } from "@/app/hooks/useStripe";
-import { useAuth } from "@/contexts/authContext";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 
@@ -38,22 +35,11 @@ const plans = [
   },
 ];
 
-export function PricingSection() {
-  const { createSubscriptionStripeCheckout } = useStripe();
-  const { user } = useAuth();
+type PricingSectionProps = {
+  onTrialClick?: () => void;
+};
 
-  function handleVerifyLoggedAndCreateSubscription(product: any) {
-    if (!user) {
-      return toast.error("Você precisa estar logado para isso");
-    }
-
-    return createSubscriptionStripeCheckout({
-      product,
-      user,
-      token: localStorage.getItem("token") || "",
-    });
-  }
-
+export function PricingSection({ onTrialClick }: PricingSectionProps) {
   return (
     <section className="py-20" id="pricingSection">
       <div className="container mx-auto px-4">
@@ -70,9 +56,9 @@ export function PricingSection() {
         </p>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, planIndex) => (
+          {plans.map((plan) => (
             <Card
-              key={planIndex}
+              key={plan.name}
               className={`transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
                 plan.highlighted
                   ? "border-primary border-2 shadow-xl relative"
@@ -100,20 +86,33 @@ export function PricingSection() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3 mb-6">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-3">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-3">
                       <Check className="h-5 w-5 text-primary flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Button asChild
-                  className="w-full hover:bg-secondary-foreground !transition-all !duration-300 hover:cursor-pointer"
-                  size="lg"
-                  variant={plan.highlighted ? "default" : "outline"} 
-                >
-                  <a href="https://wa.link/3ncash">Comprar</a>
-                </Button>
+                {onTrialClick ? (
+                  <Button
+                    type="button"
+                    onClick={onTrialClick}
+                    className="w-full hover:bg-secondary-foreground !transition-all !duration-300 hover:cursor-pointer"
+                    size="lg"
+                    variant={plan.highlighted ? "default" : "outline"}
+                  >
+                    Solicitar teste grátis
+                  </Button>
+                ) : (
+                  <Button
+                    asChild
+                    className="w-full hover:bg-secondary-foreground !transition-all !duration-300 hover:cursor-pointer"
+                    size="lg"
+                    variant={plan.highlighted ? "default" : "outline"}
+                  >
+                    <a href="https://wa.link/3ncash">Comprar</a>
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}

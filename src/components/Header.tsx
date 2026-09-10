@@ -1,12 +1,17 @@
 "use client";
 
 import { CreditCardIcon, LogIn } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useStripe } from "@/app/hooks/useStripe";
 import { useAuth } from "@/contexts/authContext";
 import { Button } from "./ui/button";
 
-export function Header() {
+type HeaderProps = {
+  onTrialClick?: () => void;
+};
+
+export function Header({ onTrialClick }: HeaderProps) {
   const { user } = useAuth();
 
   const { handleCreateStripePortal } = useStripe();
@@ -16,9 +21,11 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <img
+            <Image
               src="/fortalkLogoWhite.png"
               alt="Logo Fortalk"
+              width={112}
+              height={38}
               className="w-28"
             />
           </div>
@@ -42,13 +49,22 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4 flex-wrap">
-            {/* <Button
-              variant="secondary"
-              size="lg"
-              className="bg-white text-primary hover:bg-white/90"
-            >
-              Testar agora
-            </Button> */}
+            {onTrialClick ? (
+              <button
+                type="button"
+                onClick={onTrialClick}
+                className="hidden md:inline-flex items-center justify-center py-2 px-4 rounded-[8px] bg-white text-primary hover:bg-white/90 font-semibold transition-colors"
+              >
+                Teste grátis
+              </button>
+            ) : (
+              <Link
+                href="/teste-gratis"
+                className="hidden md:inline-flex items-center justify-center py-2 px-4 rounded-[8px] bg-white text-primary hover:bg-white/90 font-semibold transition-colors"
+              >
+                Teste grátis
+              </Link>
+            )}
             {user ? (
               <Link
                 href="https://login.fortalk.app.br/"

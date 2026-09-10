@@ -1,7 +1,10 @@
 import Image from "next/image";
-import { Button } from "./ui/button";
 
-export function HeroSection() {
+type HeroSectionProps = {
+  onTrialClick?: () => void;
+};
+
+export function HeroSection({ onTrialClick }: HeroSectionProps) {
   return (
     <section
       id="home"
@@ -36,9 +39,25 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up"
             style={{ animationDelay: "0.4s" }}
           >
+            {onTrialClick ? (
+              <button
+                type="button"
+                onClick={onTrialClick}
+                className="text-md font-semibold px-8 bg-primary text-white rounded-lg py-3 shadow-lg shadow-primary/20 transition-all hover:scale-105"
+              >
+                Solicitar teste grátis
+              </button>
+            ) : (
+              <a
+                href="/teste-gratis"
+                className="text-md font-semibold px-8 bg-primary text-white rounded-lg py-3 shadow-lg shadow-primary/20 transition-all hover:scale-105"
+              >
+                Solicitar teste grátis
+              </a>
+            )}
             <a
               href="#pricingSection"
-              className="text-md font-semibold px-8 bg-primary text-white rounded-lg py-3 shadow-lg shadow-primary/20 transition-all hover:scale-105"
+              className="text-md font-semibold px-8 border border-primary text-primary rounded-lg py-3 transition-all hover:bg-primary/10"
             >
               Ver planos
             </a>
@@ -51,9 +70,11 @@ export function HeroSection() {
         >
           <div className="relative aspect-video overflow-hidden backdrop-blur-sm hover:scale-[1.02] transition-transform duration-500">
             <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              <img
+              <Image
                 src="/fortalkInterfaceImage.webp"
                 alt="Interface ForTalk"
+                width={1600}
+                height={900}
                 className="w-full"
               />
             </div>

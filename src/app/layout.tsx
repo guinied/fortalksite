@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fortalk",
-  description: "Centralize seus atendimento em um só lugar",
+  title: "ForTalk | Atendimento organizado no WhatsApp",
+  description:
+    "Centralize o atendimento da sua empresa no WhatsApp e dê mais agilidade para a sua equipe.",
   icons: {
     icon: "/favicon.png",
   },
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
