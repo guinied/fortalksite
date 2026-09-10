@@ -856,17 +856,20 @@ export function TrialRequestPage() {
                         id="trial-dialog-title"
                         className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
                       >
-                        Faça seu teste grátis
+                        {submitted
+                          ? "Solicitação recebida"
+                          : "Faça seu teste grátis"}
                       </h2>
                       <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
-                        Informe, se souber, o tamanho aproximado da sua
-                        operação. Esses dados não precisam estar exatos.
+                        {submitted
+                          ? "A equipe ForTalk recebeu seus dados e falará com você em breve."
+                          : "Informe, se souber, o tamanho aproximado da sua operação. Esses dados não precisam estar exatos."}
                       </p>
                     </div>
                   </div>
                   <button
                     type="button"
-                    aria-label="Fechar formulário"
+                    aria-label="Fechar"
                     onClick={() => setIsFormOpen(false)}
                     className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-primary hover:text-primary focus:outline-none focus:ring-4 focus:ring-primary/15"
                   >
@@ -875,196 +878,224 @@ export function TrialRequestPage() {
                 </div>
               </div>
 
-              <form className="space-y-5 p-6 sm:p-8" onSubmit={handleSubmit}>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="sm:col-span-2">
-                    <label
-                      htmlFor="trial-name"
-                      className="text-sm font-semibold text-slate-950"
-                    >
-                      Seu nome
-                    </label>
-                    <input
-                      id="trial-name"
-                      name="name"
-                      type="text"
-                      required
-                      autoComplete="name"
-                      value={form.name}
-                      onChange={(event) =>
-                        updateField("name", event.target.value)
-                      }
-                      placeholder="Como podemos chamar você?"
-                      className={fieldClassName}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="trial-phone"
-                      className="text-sm font-semibold text-slate-950"
-                    >
-                      Telefone de contato
-                    </label>
-                    <input
-                      id="trial-phone"
-                      name="phone"
-                      type="tel"
-                      required
-                      autoComplete="tel"
-                      pattern={"\\(\\d{2}\\) \\d{4,5}-\\d{4}"}
-                      value={form.phone}
-                      onChange={(event) =>
-                        updateField("phone", formatPhone(event.target.value))
-                      }
-                      placeholder="(51) 99999-9999"
-                      title="Informe um telefone com DDD"
-                      className={fieldClassName}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="trial-company"
-                      className="text-sm font-semibold text-slate-950"
-                    >
-                      Nome da empresa
-                    </label>
-                    <input
-                      id="trial-company"
-                      name="company"
-                      type="text"
-                      required
-                      autoComplete="organization"
-                      value={form.company}
-                      onChange={(event) =>
-                        updateField("company", event.target.value)
-                      }
-                      placeholder="Nome da sua empresa"
-                      className={fieldClassName}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="trial-users"
-                      className="text-sm font-semibold text-slate-950"
-                    >
-                      Usuários (aprox.)
-                    </label>
-                    <input
-                      id="trial-users"
-                      name="users"
-                      type="number"
-                      min="1"
-                      max="999"
-                      inputMode="numeric"
-                      value={form.users}
-                      onChange={(event) =>
-                        updateField("users", event.target.value)
-                      }
-                      placeholder="Ex.: 4"
-                      className={fieldClassName}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="trial-numbers"
-                      className="text-sm font-semibold text-slate-950"
-                    >
-                      Números (aprox.)
-                    </label>
-                    <input
-                      id="trial-numbers"
-                      name="numbers"
-                      type="number"
-                      min="1"
-                      max="999"
-                      inputMode="numeric"
-                      value={form.numbers}
-                      onChange={(event) =>
-                        updateField("numbers", event.target.value)
-                      }
-                      placeholder="Ex.: 2"
-                      className={fieldClassName}
-                    />
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-primary/20 bg-[#f1fffc] p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-xl bg-primary/15 p-2 text-primary">
-                      <BarChart3 className="h-5 w-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                        Estimativa da operação
-                      </p>
-                      {estimate ? (
-                        <>
-                          <p className="mt-1 text-lg font-bold text-slate-950">
-                            Faixa aproximada: {estimate.name}
-                          </p>
-                          <p className="text-sm text-slate-600">
-                            {estimate.price
-                              ? `A partir de ${formatPrice(estimate.price)}/mês · sujeito à confirmação`
-                              : "A equipe confirma a configuração ideal com você."}
-                          </p>
-                        </>
-                      ) : (
-                        <p className="mt-1 text-sm leading-6 text-slate-600">
-                          Opcional: informe uma estimativa para visualizar uma
-                          faixa de plano. Você também pode deixar em branco.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {showError && (
-                  <p className="text-sm font-medium text-red-600" role="alert">
-                    Confira nome, telefone e empresa para continuar. Usuários e
-                    números são opcionais.
-                  </p>
-                )}
-
-                {submitError && (
-                  <p className="text-sm font-medium text-red-600" role="alert">
-                    Não foi possível enviar agora. Tente novamente em instantes.
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isSending || submitted}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
+              {submitted ? (
+                <div
+                  className="flex min-h-[360px] flex-col items-center justify-center px-6 py-12 text-center sm:px-12"
+                  aria-live="polite"
                 >
-                  {isSending
-                    ? "Enviando solicitação..."
-                    : submitted
-                      ? "Solicitação enviada"
-                      : "Solicitar teste grátis"}
-                  {!isSending && !submitted && (
-                    <ArrowRight className="h-4 w-4" />
-                  )}
-                </button>
-
-                <div className="flex items-center justify-center gap-2 text-center text-xs leading-5 text-slate-500">
-                  <ShieldCheck className="h-4 w-4 flex-shrink-0 text-primary" />
-                  Sem compromisso. A equipe ForTalk entra em contato com você.
-                </div>
-
-                {submitted && (
-                  <output
-                    className="block rounded-xl bg-emerald-50 p-3 text-center text-sm font-medium text-emerald-700"
-                    aria-live="polite"
-                  >
-                    Solicitação enviada. A equipe ForTalk recebeu seus dados e
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary ring-8 ring-primary/5">
+                    <Check className="h-8 w-8" strokeWidth={2.5} />
+                  </div>
+                  <p className="mt-7 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                    Tudo certo
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+                    Seu pedido foi enviado.
+                  </h3>
+                  <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
+                    A equipe ForTalk já recebeu as informações da sua empresa e
                     entrará em contato pelo WhatsApp.
-                  </output>
-                )}
-              </form>
+                  </p>
+                  <div className="mt-8 rounded-2xl bg-[#f1fffc] px-5 py-4 text-sm font-medium text-slate-700">
+                    Obrigado pelo interesse no ForTalk.
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsFormOpen(false)}
+                    className="mt-8 inline-flex h-11 items-center justify-center rounded-xl bg-primary px-8 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
+                  >
+                    Fechar
+                  </button>
+                </div>
+              ) : (
+                <form className="space-y-5 p-6 sm:p-8" onSubmit={handleSubmit}>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="trial-name"
+                        className="text-sm font-semibold text-slate-950"
+                      >
+                        Seu nome
+                      </label>
+                      <input
+                        id="trial-name"
+                        name="name"
+                        type="text"
+                        required
+                        autoComplete="name"
+                        value={form.name}
+                        onChange={(event) =>
+                          updateField("name", event.target.value)
+                        }
+                        placeholder="Como podemos chamar você?"
+                        className={fieldClassName}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="trial-phone"
+                        className="text-sm font-semibold text-slate-950"
+                      >
+                        Telefone de contato
+                      </label>
+                      <input
+                        id="trial-phone"
+                        name="phone"
+                        type="tel"
+                        required
+                        autoComplete="tel"
+                        pattern={"\\(\\d{2}\\) \\d{4,5}-\\d{4}"}
+                        value={form.phone}
+                        onChange={(event) =>
+                          updateField("phone", formatPhone(event.target.value))
+                        }
+                        placeholder="(51) 99999-9999"
+                        title="Informe um telefone com DDD"
+                        className={fieldClassName}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="trial-company"
+                        className="text-sm font-semibold text-slate-950"
+                      >
+                        Nome da empresa
+                      </label>
+                      <input
+                        id="trial-company"
+                        name="company"
+                        type="text"
+                        required
+                        autoComplete="organization"
+                        value={form.company}
+                        onChange={(event) =>
+                          updateField("company", event.target.value)
+                        }
+                        placeholder="Nome da sua empresa"
+                        className={fieldClassName}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="trial-users"
+                        className="text-sm font-semibold text-slate-950"
+                      >
+                        Usuários (aprox.)
+                      </label>
+                      <input
+                        id="trial-users"
+                        name="users"
+                        type="number"
+                        min="1"
+                        max="999"
+                        inputMode="numeric"
+                        value={form.users}
+                        onChange={(event) =>
+                          updateField("users", event.target.value)
+                        }
+                        placeholder="Ex.: 4"
+                        className={fieldClassName}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="trial-numbers"
+                        className="text-sm font-semibold text-slate-950"
+                      >
+                        Números (aprox.)
+                      </label>
+                      <input
+                        id="trial-numbers"
+                        name="numbers"
+                        type="number"
+                        min="1"
+                        max="999"
+                        inputMode="numeric"
+                        value={form.numbers}
+                        onChange={(event) =>
+                          updateField("numbers", event.target.value)
+                        }
+                        placeholder="Ex.: 2"
+                        className={fieldClassName}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-primary/20 bg-[#f1fffc] p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-xl bg-primary/15 p-2 text-primary">
+                        <BarChart3 className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                          Estimativa da operação
+                        </p>
+                        {estimate ? (
+                          <>
+                            <p className="mt-1 text-lg font-bold text-slate-950">
+                              Faixa aproximada: {estimate.name}
+                            </p>
+                            <p className="text-sm text-slate-600">
+                              {estimate.price
+                                ? `A partir de ${formatPrice(estimate.price)}/mês · sujeito à confirmação`
+                                : "A equipe confirma a configuração ideal com você."}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="mt-1 text-sm leading-6 text-slate-600">
+                            Opcional: informe uma estimativa para visualizar uma
+                            faixa de plano. Você também pode deixar em branco.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {showError && (
+                    <p
+                      className="text-sm font-medium text-red-600"
+                      role="alert"
+                    >
+                      Confira nome, telefone e empresa para continuar. Usuários
+                      e números são opcionais.
+                    </p>
+                  )}
+
+                  {submitError && (
+                    <p
+                      className="text-sm font-medium text-red-600"
+                      role="alert"
+                    >
+                      Não foi possível enviar agora. Tente novamente em
+                      instantes.
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isSending || submitted}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
+                  >
+                    {isSending
+                      ? "Enviando solicitação..."
+                      : submitted
+                        ? "Solicitação enviada"
+                        : "Solicitar teste grátis"}
+                    {!isSending && !submitted && (
+                      <ArrowRight className="h-4 w-4" />
+                    )}
+                  </button>
+
+                  <div className="flex items-center justify-center gap-2 text-center text-xs leading-5 text-slate-500">
+                    <ShieldCheck className="h-4 w-4 flex-shrink-0 text-primary" />
+                    Sem compromisso. A equipe ForTalk entra em contato com você.
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         </div>
