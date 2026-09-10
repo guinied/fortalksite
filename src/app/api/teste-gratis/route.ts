@@ -47,6 +47,28 @@ function getEstimate(users: number | null, numbers: number | null) {
   return `${plan.name} — valor indicativo de ${formatPrice(plan.price)}/mês`;
 }
 
+async function readResponseBody(response: Response) {
+  const text = await response.text();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    return text;
+  }
+}
+
+function hasProviderError(body: unknown) {
+  if (!isRecord(body)) return false;
+
+  if (body.success === false || body.success === "false") return true;
+  if (body.error) return true;
+
+  const status =
+    typeof body.status === "string" ? body.status.toLowerCase() : "";
+  return ["error", "failed", "failure"].includes(status);
+}
+
 function getRequiredEnvironment() {
   const serverUrl = (process.env.UAZAPI_SERVER_URL ?? defaultServerUrl)
     .trim()
@@ -141,7 +163,12 @@ export async function POST(request: Request) {
       signal: controller.signal,
     });
 
-    if (!response.ok) {
+    const providerBody = await readResponseBody(response);
+
+    if (!response.ok || hasProviderError(providerBody)) {
+      console.error("UAZAPI rejeitou o pedido de teste grátis", {
+        status: response.status,
+      });
       return NextResponse.json(
         { message: "O serviço de WhatsApp não aceitou a solicitação." },
         { status: 502 },
