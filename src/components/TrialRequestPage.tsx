@@ -146,7 +146,6 @@ export function TrialRequestPage() {
   const [submitted, setSubmitted] = useState(false);
   const [showError, setShowError] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [providerResponse, setProviderResponse] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -175,7 +174,6 @@ export function TrialRequestPage() {
     setSubmitted(false);
     setShowError(false);
     setSubmitError(null);
-    setProviderResponse(null);
     setIsFormOpen(true);
   }
 
@@ -183,7 +181,6 @@ export function TrialRequestPage() {
     setSubmitted(false);
     setShowError(false);
     setSubmitError(null);
-    setProviderResponse(null);
     setForm((current) => ({ ...current, [field]: value }));
   }
 
@@ -198,7 +195,6 @@ export function TrialRequestPage() {
 
     setIsSending(true);
     setSubmitError(null);
-    setProviderResponse(null);
 
     try {
       const response = await fetch("/api/teste-gratis", {
@@ -209,12 +205,7 @@ export function TrialRequestPage() {
 
       const result = (await response.json().catch(() => null)) as {
         message?: string;
-        providerResponse?: unknown;
       } | null;
-
-      if (result?.providerResponse !== undefined) {
-        setProviderResponse(JSON.stringify(result.providerResponse, null, 2));
-      }
 
       if (!response.ok) {
         throw new Error(
@@ -883,7 +874,7 @@ export function TrialRequestPage() {
                       </h2>
                       <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
                         {submitted
-                          ? "A equipe ForTalk recebeu seus dados e falará com você em breve."
+                          ? "Nossa equipe ForTalk enviará seus acessos em alguns minutos."
                           : "Informe, se souber, o tamanho aproximado da sua operação. Esses dados não precisam estar exatos."}
                       </p>
                     </div>
@@ -906,29 +897,6 @@ export function TrialRequestPage() {
                 >
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary ring-8 ring-primary/5">
                     <Check className="h-8 w-8" strokeWidth={2.5} />
-                  </div>
-                  <p className="mt-7 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-                    Tudo certo
-                  </p>
-                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
-                    Seu pedido foi enviado.
-                  </h3>
-                  <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
-                    A equipe ForTalk já recebeu as informações da sua empresa e
-                    entrará em contato pelo WhatsApp.
-                  </p>
-                  {providerResponse && (
-                    <div className="mt-6 w-full max-w-lg rounded-2xl border border-slate-200 bg-slate-950 p-4 text-left text-slate-100 shadow-inner">
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground/80">
-                        Resposta HTTP da UAZAPI
-                      </p>
-                      <pre className="mt-3 max-h-52 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-300">
-                        {providerResponse}
-                      </pre>
-                    </div>
-                  )}
-                  <div className="mt-8 rounded-2xl bg-[#f1fffc] px-5 py-4 text-sm font-medium text-slate-700">
-                    Obrigado pelo interesse no ForTalk.
                   </div>
                   <button
                     type="button"
@@ -1068,18 +1036,17 @@ export function TrialRequestPage() {
                         {estimate ? (
                           <>
                             <p className="mt-1 text-lg font-bold text-slate-950">
-                              Faixa aproximada: {estimate.name}
+                              Estimativa recebida
                             </p>
                             <p className="text-sm text-slate-600">
-                              {estimate.price
-                                ? `A partir de ${formatPrice(estimate.price)}/mês · sujeito à confirmação`
-                                : "A equipe confirma a configuração ideal com você."}
+                              A equipe usa esses dados para indicar a
+                              configuração mais adequada para sua operação.
                             </p>
                           </>
                         ) : (
                           <p className="mt-1 text-sm leading-6 text-slate-600">
-                            Opcional: informe uma estimativa para visualizar uma
-                            faixa de plano. Você também pode deixar em branco.
+                            Opcional: informe uma estimativa para orientar a
+                            configuração. Você também pode deixar em branco.
                           </p>
                         )}
                       </div>
@@ -1103,17 +1070,6 @@ export function TrialRequestPage() {
                     >
                       {submitError}
                     </p>
-                  )}
-
-                  {providerResponse && (
-                    <div className="rounded-2xl border border-slate-200 bg-slate-950 p-4 text-left text-slate-100">
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground/80">
-                        Resposta HTTP da UAZAPI
-                      </p>
-                      <pre className="mt-3 max-h-52 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-300">
-                        {providerResponse}
-                      </pre>
-                    </div>
                   )}
 
                   <button
