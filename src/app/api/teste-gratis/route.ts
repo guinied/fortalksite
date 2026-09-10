@@ -121,6 +121,14 @@ function sanitizeProviderResponse(value: unknown): unknown {
   );
 }
 
+function getProviderHttpResponse(response: Response, body: unknown) {
+  return {
+    status: response.status,
+    ok: response.ok,
+    body: sanitizeProviderResponse(body),
+  };
+}
+
 function getRequiredEnvironment() {
   const serverUrl = (process.env.UAZAPI_SERVER_URL ?? defaultServerUrl)
     .trim()
@@ -225,7 +233,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           message: getProviderFailureMessage(response, providerBody),
-          providerResponse: sanitizeProviderResponse(providerBody),
+          providerResponse: getProviderHttpResponse(response, providerBody),
         },
         { status: 502 },
       );
@@ -233,7 +241,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       ok: true,
-      providerResponse: sanitizeProviderResponse(providerBody),
+      providerResponse: getProviderHttpResponse(response, providerBody),
     });
   } catch {
     return NextResponse.json(

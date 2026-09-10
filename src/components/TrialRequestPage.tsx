@@ -920,7 +920,7 @@ export function TrialRequestPage() {
                   {providerResponse && (
                     <div className="mt-6 w-full max-w-lg rounded-2xl border border-slate-200 bg-slate-950 p-4 text-left text-slate-100 shadow-inner">
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground/80">
-                        Retorno técnico da UAZAPI
+                        Resposta HTTP da UAZAPI
                       </p>
                       <pre className="mt-3 max-h-52 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-300">
                         {providerResponse}
@@ -1108,7 +1108,7 @@ export function TrialRequestPage() {
                   {providerResponse && (
                     <div className="rounded-2xl border border-slate-200 bg-slate-950 p-4 text-left text-slate-100">
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground/80">
-                        Retorno técnico da UAZAPI
+                        Resposta HTTP da UAZAPI
                       </p>
                       <pre className="mt-3 max-h-52 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-300">
                         {providerResponse}
