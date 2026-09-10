@@ -912,7 +912,7 @@ export function TrialRequestPage() {
                       type="tel"
                       required
                       autoComplete="tel"
-                      pattern="\\(\\d{2}\\) \\d{4,5}-\\d{4}"
+                      pattern={"\\(\\d{2}\\) \\d{4,5}-\\d{4}"}
                       value={form.phone}
                       onChange={(event) =>
                         updateField("phone", formatPhone(event.target.value))
