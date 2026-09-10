@@ -852,33 +852,41 @@ export function TrialRequestPage() {
               className="w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white text-slate-950 shadow-2xl shadow-slate-950/30"
               role="dialog"
               aria-modal="true"
-              aria-labelledby="trial-dialog-title"
+              aria-labelledby={!submitted ? "trial-dialog-title" : undefined}
+              aria-label={submitted ? "Solicitação recebida" : undefined}
             >
-              <div className="bg-gradient-to-br from-primary/10 via-white to-accent/10 p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-5">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
-                      <MessageCircle className="h-6 w-6" />
+              <div
+                className={
+                  submitted
+                    ? "bg-white p-4 sm:p-5"
+                    : "bg-gradient-to-br from-primary/10 via-white to-accent/10 p-6 sm:p-8"
+                }
+              >
+                <div
+                  className={`flex items-start gap-5 ${submitted ? "justify-end" : "justify-between"}`}
+                >
+                  {!submitted && (
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
+                        <MessageCircle className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                          Comece agora
+                        </p>
+                        <h2
+                          id="trial-dialog-title"
+                          className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
+                        >
+                          Faça seu teste grátis
+                        </h2>
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
+                          Informe, se souber, o tamanho aproximado da sua
+                          operação. Esses dados não precisam estar exatos.
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-                        Comece agora
-                      </p>
-                      <h2
-                        id="trial-dialog-title"
-                        className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
-                      >
-                        {submitted
-                          ? "Solicitação recebida"
-                          : "Faça seu teste grátis"}
-                      </h2>
-                      <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
-                        {submitted
-                          ? "Nossa equipe ForTalk enviará seus acessos em alguns minutos."
-                          : "Informe, se souber, o tamanho aproximado da sua operação. Esses dados não precisam estar exatos."}
-                      </p>
-                    </div>
-                  </div>
+                  )}
                   <button
                     type="button"
                     aria-label="Fechar"
@@ -898,6 +906,10 @@ export function TrialRequestPage() {
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary ring-8 ring-primary/5">
                     <Check className="h-8 w-8" strokeWidth={2.5} />
                   </div>
+                  <p className="mt-7 max-w-md text-center text-base leading-6 text-slate-600">
+                    Nossa equipe ForTalk entrará em contato e enviará seus
+                    acessos em alguns minutos.
+                  </p>
                   <button
                     type="button"
                     onClick={() => setIsFormOpen(false)}
