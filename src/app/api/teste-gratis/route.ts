@@ -102,6 +102,25 @@ function getProviderFailureMessage(response: Response, body: unknown) {
   return "A UAZAPI não confirmou o envio. Tente novamente em instantes.";
 }
 
+function sanitizeProviderResponse(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(sanitizeProviderResponse);
+  }
+
+  if (!isRecord(value)) return value;
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(
+        ([key]) =>
+          !["token", "apikey", "authorization", "secret", "password"].some(
+            (sensitivePart) => key.toLowerCase().includes(sensitivePart),
+          ),
+      )
+      .map(([key, item]) => [key, sanitizeProviderResponse(item)]),
+  );
+}
+
 function getRequiredEnvironment() {
   const serverUrl = (process.env.UAZAPI_SERVER_URL ?? defaultServerUrl)
     .trim()
@@ -204,12 +223,18 @@ export async function POST(request: Request) {
         providerStatus: getProviderStatus(providerBody),
       });
       return NextResponse.json(
-        { message: getProviderFailureMessage(response, providerBody) },
+        {
+          message: getProviderFailureMessage(response, providerBody),
+          providerResponse: sanitizeProviderResponse(providerBody),
+        },
         { status: 502 },
       );
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      providerResponse: sanitizeProviderResponse(providerBody),
+    });
   } catch {
     return NextResponse.json(
       { message: "Não foi possível conectar ao serviço de WhatsApp." },

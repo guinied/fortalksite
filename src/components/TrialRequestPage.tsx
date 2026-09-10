@@ -146,6 +146,7 @@ export function TrialRequestPage() {
   const [submitted, setSubmitted] = useState(false);
   const [showError, setShowError] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [providerResponse, setProviderResponse] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -174,6 +175,7 @@ export function TrialRequestPage() {
     setSubmitted(false);
     setShowError(false);
     setSubmitError(null);
+    setProviderResponse(null);
     setIsFormOpen(true);
   }
 
@@ -181,6 +183,7 @@ export function TrialRequestPage() {
     setSubmitted(false);
     setShowError(false);
     setSubmitError(null);
+    setProviderResponse(null);
     setForm((current) => ({ ...current, [field]: value }));
   }
 
@@ -195,6 +198,7 @@ export function TrialRequestPage() {
 
     setIsSending(true);
     setSubmitError(null);
+    setProviderResponse(null);
 
     try {
       const response = await fetch("/api/teste-gratis", {
@@ -205,7 +209,12 @@ export function TrialRequestPage() {
 
       const result = (await response.json().catch(() => null)) as {
         message?: string;
+        providerResponse?: unknown;
       } | null;
+
+      if (result?.providerResponse !== undefined) {
+        setProviderResponse(JSON.stringify(result.providerResponse, null, 2));
+      }
 
       if (!response.ok) {
         throw new Error(
@@ -908,6 +917,16 @@ export function TrialRequestPage() {
                     A equipe ForTalk já recebeu as informações da sua empresa e
                     entrará em contato pelo WhatsApp.
                   </p>
+                  {providerResponse && (
+                    <div className="mt-6 w-full max-w-lg rounded-2xl border border-slate-200 bg-slate-950 p-4 text-left text-slate-100 shadow-inner">
+                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground/80">
+                        Retorno técnico da UAZAPI
+                      </p>
+                      <pre className="mt-3 max-h-52 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-300">
+                        {providerResponse}
+                      </pre>
+                    </div>
+                  )}
                   <div className="mt-8 rounded-2xl bg-[#f1fffc] px-5 py-4 text-sm font-medium text-slate-700">
                     Obrigado pelo interesse no ForTalk.
                   </div>
@@ -1084,6 +1103,17 @@ export function TrialRequestPage() {
                     >
                       {submitError}
                     </p>
+                  )}
+
+                  {providerResponse && (
+                    <div className="rounded-2xl border border-slate-200 bg-slate-950 p-4 text-left text-slate-100">
+                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground/80">
+                        Retorno técnico da UAZAPI
+                      </p>
+                      <pre className="mt-3 max-h-52 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-300">
+                        {providerResponse}
+                      </pre>
+                    </div>
                   )}
 
                   <button
